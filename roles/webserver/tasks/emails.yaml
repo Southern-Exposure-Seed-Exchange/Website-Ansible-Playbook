@@ -1,0 +1,25 @@
+---
+
+- name: Install MSMTP
+  apt:
+    name:
+      - msmtp
+      - msmtp-mta
+      - ca-certificates
+  become: true
+
+- name: Configure MSMTP
+  template:
+    dest: /etc/msmtprc
+    src: msmtprc.j2
+    mode: '0660'
+    group: mail
+  become: true
+
+- name: Ensure MSMTP Logfile Exists
+  file:
+    path: /var/log/msmtp.log
+    mode: '0660'
+    group: mail
+    state: touch
+  become: true

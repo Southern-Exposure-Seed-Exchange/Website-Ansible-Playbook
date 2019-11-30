@@ -1,3 +1,5 @@
 ---
 
 pavans_password: "{{ vault_pavans_password }}"
+
+msmtp_password: "{{ vault_msmtp_password }}"

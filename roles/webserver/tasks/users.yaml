@@ -14,6 +14,7 @@
     groups:
       - adm
       - sudo
+      - mail
     append: true
     shell: "/bin/zsh"
   become: true
