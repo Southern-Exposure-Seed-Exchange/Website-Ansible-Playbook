@@ -1,0 +1,26 @@
+---
+
+- name: Install PostgreSQL Database
+  apt:
+    name:
+      - postgresql-10
+      - postgresql-client-10
+      - libpq5
+      - libpq-dev
+      - python-psycopg2
+  become: true
+
+- name: Ensure PostgreSQL User Exists
+  postgresql_user:
+    name: sese-website
+    password: "{{ website_db_password }}"
+    role_attr_flags: "NOSUPERUSER,NOCREATEROLE,CREATEDB"
+  become: true
+  become_user: postgres
+
+- name: Ensure PostgreSQL Database Exists
+  postgresql_db:
+    name: sese-website
+    owner: sese-website
+  become: true
+  become_user: postgres
