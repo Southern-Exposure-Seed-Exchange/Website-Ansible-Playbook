@@ -24,6 +24,12 @@
     group: mail
   become: true
 
+- name: Ensure MSMTP Logfiles Are Rotated
+  copy:
+    dest: /etc/logrotate.d/msmtp
+    src: roles/webserver/files/logrotate_msmtp
+  become: true
+
 - name: Configure Email Aliases
   copy:
     dest: /etc/aliases

@@ -1,0 +1,10 @@
+/var/log/msmtp.log
+{
+    rotate 6
+    weekly
+    size 50M
+    missingok
+    notifempty
+    create
+    compress
+}
