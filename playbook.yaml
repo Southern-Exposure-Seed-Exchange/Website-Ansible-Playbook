@@ -1,0 +1,5 @@
+---
+
+- hosts: '{{ host | default("localtest") }}'
+  roles:
+    - webserver

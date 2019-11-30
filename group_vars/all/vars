@@ -1,0 +1,3 @@
+---
+
+pavans_password: "{{ vault_pavans_password }}"

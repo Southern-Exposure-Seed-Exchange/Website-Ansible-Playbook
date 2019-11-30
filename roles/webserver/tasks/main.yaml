@@ -1,0 +1,16 @@
+---
+
+- name: Update Package List
+  apt:
+    update_cache: true
+  become: true
+
+- name: Install Basic Utilities
+  apt:
+    name:
+      - git
+      - htop
+      - vim
+  become: true
+
+- import_tasks: users.yaml
