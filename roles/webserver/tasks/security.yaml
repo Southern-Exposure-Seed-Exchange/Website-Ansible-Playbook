@@ -1,0 +1,23 @@
+---
+
+- name: Install Unattended Upgrades Packages
+  apt:
+    name:
+      - apt-listchanges
+      - unattended-upgrades
+  become: true
+
+- name: Configure Auto Upgrades
+  copy:
+    dest: /etc/apt/apt.conf.d/20auto-upgrades
+    content: "{{ item }}"
+  with_file:
+    - auto-upgrades
+  become: true
+
+- name: Enable Unattended Upgrade Email Reports
+  lineinfile:
+    path: /etc/apt/apt.conf.d/50unattended-upgrades
+    regexp: '^(//)?.*?::Mail "'
+    line: 'Unattended-Upgrade::Mail "root";'
+  become: true
