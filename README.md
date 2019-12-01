@@ -22,10 +22,12 @@ the playbook will run against a local VM that is expected to have a DNS name of
 `sese-www-test.acorn`. Before running the playbook, you should ensure that the
 VM is running and you're computer will resolve the domain name to it. You can
 edit your `/etc/hosts` file to point the domain to your VMs IP if you do not
-have access to a DNS server.
+have access to a DNS server, or edit the `hosts.yaml` file to point to the
+proper domain or IP address.
 
 To run the playbook against our `staging` or `production` hosts, you must pass
-the host or group name to the `ansible-playbook` command:
+the host or group name to the `ansible-playbook` command via the `host`
+variable:
 
 ```sh
 ansible-playbook --extra-vars "host=staging" playbook.yaml

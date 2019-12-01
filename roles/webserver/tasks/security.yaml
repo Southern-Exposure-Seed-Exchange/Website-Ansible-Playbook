@@ -1,5 +1,8 @@
 ---
 
+
+# Updates
+
 - name: Install Unattended Upgrades Packages
   apt:
     name:
@@ -20,4 +23,41 @@
     path: /etc/apt/apt.conf.d/50unattended-upgrades
     regexp: '^(//)?.*?::Mail "'
     line: 'Unattended-Upgrade::Mail "root";'
+  become: true
+
+
+# Firewall
+
+- name: Allow Outgoing Connections
+  ufw:
+    default: allow
+    direction: outgoing
+  become: true
+
+- name: Block Incoming Connections
+  ufw:
+    default: reject
+    direction: incoming
+  become: true
+
+- name: Allow SSH Connections w/ Rate Limiting
+  ufw:
+    rule: limit
+    direction: in
+    name: OpenSSH
+  become: true
+
+- name: Allow HTTP(S) Connections
+  ufw:
+    rule: allow
+    direction: in
+    port: "{{ item }}"
+  with_items:
+    - "80"
+    - "443"
+  become: true
+
+- name: Ensure Firewall is Enabled
+  ufw:
+    state: enabled
   become: true
