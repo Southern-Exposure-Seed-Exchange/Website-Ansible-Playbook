@@ -5,6 +5,7 @@
     name:
       - zsh
       - fontconfig
+      - screen
   become: true
 
 - name: Add a User for Pavan
