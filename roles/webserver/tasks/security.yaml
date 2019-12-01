@@ -38,6 +38,8 @@
       line: "PermitRootLogin no"
     - regexp: "^#?PasswordAuthentication.*$"
       line: "PasswordAuthentication no"
+    - regexp: "^#?X11Forwarding.*$"
+      line: "X11Forwarding no"
   notify: restart sshd
   become: true
 
