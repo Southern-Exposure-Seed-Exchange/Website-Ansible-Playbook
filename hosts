@@ -1,8 +1,0 @@
-[production]
-www.southernexposure.com
-
-[staging]
-staging.southernexposure.com
-
-[localtest]
-sese-www-test.acorn

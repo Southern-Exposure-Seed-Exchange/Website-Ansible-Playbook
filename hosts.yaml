@@ -1,0 +1,19 @@
+---
+
+production:
+    hosts:
+        www.southernexposure.com:
+            stripe_token: "{{ vault_stripe_prod_token }}"
+            avatax_environment: production
+
+staging:
+    hosts:
+        staging.southernexposure.com:
+            stripe_token: "{{ vault_stripe_test_token }}"
+            avatax_environment: sandbox
+
+localtest:
+    hosts:
+        sese-www-test.acorn:
+            stripe_token: "{{ vault_stripe_test_token }}"
+            avatax_environment: sandbox
