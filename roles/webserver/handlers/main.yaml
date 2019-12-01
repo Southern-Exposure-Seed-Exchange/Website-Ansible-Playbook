@@ -13,3 +13,9 @@
     state: restarted
     daemon-reload: true
   become: true
+
+- name: restart sshd
+  systemd:
+    name: sshd
+    state: restarted
+  become: true

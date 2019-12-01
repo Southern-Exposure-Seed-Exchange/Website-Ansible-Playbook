@@ -26,6 +26,22 @@
   become: true
 
 
+# SSH
+
+- name: Harden SSH Server Configuration
+  lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - regexp: "^#?PermitRootLogin.*$"
+      line: "PermitRootLogin no"
+    - regexp: "^#?PasswordAuthentication.*$"
+      line: "PasswordAuthentication no"
+  notify: restart sshd
+  become: true
+
+
 # Firewall
 
 - name: Allow Outgoing Connections
@@ -51,6 +67,7 @@
   ufw:
     rule: allow
     direction: in
+    protocol: tcp
     port: "{{ item }}"
   with_items:
     - "80"
