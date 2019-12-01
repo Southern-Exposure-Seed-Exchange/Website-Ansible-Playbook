@@ -29,3 +29,7 @@
 - name: Configure Database
   import_tasks: database.yaml
   tags: database.yaml
+
+- name: Configure Website Code
+  import_tasks: code.yaml
+  tags: code
