@@ -4,6 +4,7 @@ production:
     hosts:
         www.southernexposure.com:
             stripe_token: "{{ vault_stripe_prod_token }}"
+            client_stripe_env: production
             avatax_environment: production
             use_letsencrypt: true
             letsencrypt_domains: "www.southernexposure.com,southernexposure.com"
@@ -12,6 +13,7 @@ staging:
     hosts:
         staging.southernexposure.com:
             stripe_token: "{{ vault_stripe_test_token }}"
+            client_stripe_env: test
             avatax_environment: sandbox
             use_letsencrypt: true
             letsencrypt_domains: "staging.southernexposure.com"
@@ -20,6 +22,7 @@ localtest:
     hosts:
         sese-www-test.acorn:
             stripe_token: "{{ vault_stripe_test_token }}"
+            client_stripe_env: test
             avatax_environment: sandbox
             use_letsencrypt: false
             letsencrypt_domains: ""
