@@ -2,7 +2,9 @@
 
 - name: Ensure NGINX Is Installed
   apt:
-    name: nginx
+    name:
+      - nginx
+      - ssl-cert
   become: true
 
 - name: Ensure the Default NGINX Site is Disabled

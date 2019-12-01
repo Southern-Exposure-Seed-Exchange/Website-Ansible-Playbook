@@ -12,6 +12,7 @@
       - git
       - htop
       - vim
+      - python-apt
   become: true
 
 - name: Configure Personal User Accounts

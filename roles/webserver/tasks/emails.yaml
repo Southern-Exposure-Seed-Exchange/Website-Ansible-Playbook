@@ -22,6 +22,7 @@
     path: /var/log/msmtp.log
     mode: '0660'
     group: mail
+    state: touch
   become: true
 
 - name: Ensure MSMTP Logfiles Are Rotated

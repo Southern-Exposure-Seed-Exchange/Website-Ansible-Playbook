@@ -8,6 +8,7 @@
       - libpq5
       - libpq-dev
       - python-psycopg2
+      - python3-psycopg2
   become: true
 
 - name: Ensure PostgreSQL User Exists
