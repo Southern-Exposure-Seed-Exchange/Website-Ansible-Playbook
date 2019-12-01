@@ -14,14 +14,18 @@
       - vim
   become: true
 
-- import_tasks: users.yaml
+- name: Configure Personal User Accounts
+  import_tasks: users.yaml
   tags: users
 
-- import_tasks: emails.yaml
+- name: Configure Email Sending
+  import_tasks: emails.yaml
   tags: email
 
-- import_tasks: security.yaml
+- name: Configure Server Security
+  import_tasks: security.yaml
   tags: security
 
-- import_tasks: database.yaml
+- name: Configure Database
+  import_tasks: database.yaml
   tags: database.yaml

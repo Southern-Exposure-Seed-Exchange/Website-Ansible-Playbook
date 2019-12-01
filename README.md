@@ -1,7 +1,8 @@
 # SESE Website Playbook
 
-This repository contains the Ansible Playbook we use to configure & deploy our
-Website Server.
+This repository contains the Ansible Playbook we use to configure our Website
+Server.
+
 
 ## Running the Playbook
 
