@@ -15,9 +15,13 @@
   become: true
 
 - import_tasks: users.yaml
+  tags: users
 
 - import_tasks: emails.yaml
+  tags: email
 
 - import_tasks: security.yaml
+  tags: security
 
 - import_tasks: database.yaml
+  tags: database.yaml
