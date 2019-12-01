@@ -1,0 +1,58 @@
+---
+
+- name: Create the Prerender User
+  user:
+    name: prerender
+  become: true
+
+- name: Install Prerender Browser
+  apt:
+    name: chromium-browser
+  become: true
+
+- name: Clone the Prerender Repository
+  git:
+    repo: https://github.com/prerender/prerender.git
+    accept_hostkey: true
+    dest: ~/server
+    force: true
+  notify: restart prerender
+  become: true
+  become_user: prerender
+
+- name: Install the Prerender Dependencies
+  npm:
+    path: ~/server/
+  notify: restart prerender
+  become: true
+  become_user: prerender
+
+- name: Install Prerender Plugins
+  npm:
+    name: prerender-memory-cache
+    path: ~/server/
+  notify: restart prerender
+  become: true
+  become_user: prerender
+
+- name: Install the Custom Prerender Server Script
+  copy:
+    src: roles/webserver/files/prerender_server.js
+    dest: ~/server/custom_server.js
+  notify: restart prerender
+  become: true
+  become_user: prerender
+
+- name: Install the Prerender SystemD Service
+  copy:
+    src: roles/webserver/files/systemd_prerender.service
+    dest: /etc/systemd/system/prerender.service
+  notify: restart prerender
+  become: true
+
+- name: Ensure Prerender SystemD Service is Enabled & Started
+  systemd:
+    name: prerender
+    state: started
+    enabled: true
+  become: true

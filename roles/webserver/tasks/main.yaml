@@ -33,3 +33,7 @@
 - name: Configure Website Code
   import_tasks: code.yaml
   tags: code
+
+- name: Configure Prerender Server
+  import_tasks: prerender.yaml
+  tags: prerender

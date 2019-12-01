@@ -1,0 +1,15 @@
+---
+
+- name: restart prerender
+  systemd:
+    name: prerender
+    state: restarted
+    daemon-reload: true
+  become: true
+
+- name: restart server
+  systemd:
+    name: api-server
+    state: restarted
+    daemon-reload: true
+  become: true
