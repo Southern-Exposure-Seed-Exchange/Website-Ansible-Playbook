@@ -1,0 +1,76 @@
+---
+
+- name: Ensure NGINX Is Installed
+  apt:
+    name: nginx
+  become: true
+
+- name: Ensure the Default NGINX Site is Disabled
+  file:
+    path: /etc/nginx/sites-enabled/default
+    state: absent
+  notify: restart nginx
+  become: true
+
+- name: Check if SSL Certificate Has Been Generated
+  stat:
+    path: "/etc/letsencrypt/live/{{ inventory_hostname }}"
+  register: ssl_cert_check
+  become: true
+
+- name: Configure NGINX Site
+  template:
+    dest: /etc/nginx/sites-available/website
+    src: website.nginx.j2
+  notify: restart nginx
+  become: true
+
+- name: Ensure the NGINX Site is Enabled
+  file:
+    src: /etc/nginx/sites-available/website
+    dest: /etc/nginx/sites-enabled/website
+    state: link
+  notify: restart nginx
+  become: true
+
+- name: Ensure the Website's NGINX Directories Exist
+  file:
+    path: "/var/www/{{ item }}"
+    state: directory
+    owner: www-data
+    group: www-data
+    mode: '775'
+  with_items:
+    - client
+    - media
+    - logs
+  become: true
+
+- name: Ensure the Access & Error Logs Are Rotated
+  copy:
+    src: roles/webserver/files/logrotate_webserver
+    dest: /etc/logrotate.d/webserver
+  become: true
+
+- name: Ensure Certbot Repository is Enabled
+  apt_repository:
+    repo: "ppa:certbot/certbot"
+    filename: certbot
+  when: use_letsencrypt
+  become: true
+
+- name: Ensure Certbot is Installed
+  apt:
+    name:
+      - certbot
+      - python-certbot-nginx
+    update_cache: true
+  when: use_letsencrypt
+  become: true
+
+- name: Ensure LetsEncrypt SSL Certificates Have Been Generated
+  shell: "certbot certonly --nginx -n --agree-tos -m webmaster@southernexposure.com -d {{ letsencrypt_domains }}"
+  args:
+    creates: "/etc/letsencrypt/live/{{ inventory_hostname }}"
+  when: use_letsencrypt
+  become: true

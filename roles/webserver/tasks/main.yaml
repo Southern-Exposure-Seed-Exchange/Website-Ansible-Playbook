@@ -26,6 +26,10 @@
   import_tasks: security.yaml
   tags: security
 
+- name: Configure Web Server
+  import_tasks: nginx.yaml
+  tags: nginx
+
 - name: Configure Database
   import_tasks: database.yaml
   tags: database.yaml

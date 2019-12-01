@@ -85,6 +85,9 @@
 - name: Create a User for the Website
   user:
     name: sese-website
+    groups:
+      - www-data
+    append: true
   become: true
 
 - name: Clone the Website Repository
@@ -100,6 +103,14 @@
   args:
     chdir: ~/code
     creates: ~/code/server/.stack-work
+  become: true
+  become_user: sese-website
+
+- name: Ensure the Client Code Exists in the NGINX Directory
+  shell: cp -r * /var/www/client/
+  args:
+    chdir: ~/code/client/dist
+    creates: /var/www/client/index.html
   become: true
   become_user: sese-website
 

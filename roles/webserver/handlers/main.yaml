@@ -19,3 +19,9 @@
     name: sshd
     state: restarted
   become: true
+
+- name: restart nginx
+  systemd:
+    name: nginx
+    state: restarted
+  become: true
