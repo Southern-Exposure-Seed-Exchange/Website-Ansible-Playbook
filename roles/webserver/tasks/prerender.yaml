@@ -3,6 +3,7 @@
 - name: Create the Prerender User
   user:
     name: prerender
+    shell: "/bin/bash"
   become: true
 
 - name: Install Prerender Browser
