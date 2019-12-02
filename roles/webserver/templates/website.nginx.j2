@@ -105,6 +105,11 @@ server {
         proxy_pass http://127.0.0.1:3000/;
     }
 
+    # Redirect the Sitemap & Google Merchant Feed
+    rewrite ^/sitemap.xml$ /api/sitemap.xml redirect;
+    rewrite ^/sitemap-index.xml$ /api/sitemap-index.xml redirect;
+    rewrite ^/merchant-feed.xml$ /api/merchant-feed.xml redirect;
+
     resolver "8.8.8.8";
     # Proxy the Offsite Wordpress Blog
     location /blog/ {
