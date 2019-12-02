@@ -7,7 +7,7 @@ production:
             client_stripe_env: production
             avatax_environment: production
             use_letsencrypt: true
-            letsencrypt_domains: "www.southernexposure.com,southernexposure.com"
+            letsencrypt_domains: "www.southernexposure.com,southernexposure.com,wwwvps.southernexposure.com"
 
 staging:
     hosts:
