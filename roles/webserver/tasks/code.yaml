@@ -100,7 +100,7 @@
   become_user: sese-website
 
 - name: Ensure the Website Code Has Been Built Once
-  command: "STRIPE_ENV={{ client_stripe_env | default('test') }} ./manage.hs build"
+  shell: "STRIPE_ENV={{ client_stripe_env | default('test') }} ./manage.hs build"
   args:
     chdir: ~/code
     creates: ~/code/server/.stack-work
