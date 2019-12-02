@@ -96,8 +96,13 @@ server {
     }
 
     # Serve Media from /var/www/media
-    location /media/ {
-        root /var/www/;
+    location ^~ /media {
+        root /var/www;
+
+        # Long-term Caching
+        location ~* .(jpe?g|png|gif|ico|css|js|ttf|woff2?)$ {
+            expires 365d;
+        }
     }
 
     # Proxy the API Server
@@ -126,7 +131,7 @@ server {
 
 
     # Cache Static Assets for a Long Time
-    location ~* .(jpg|jpeg|png|gif|ico|css|js|ttf|woff2?)$ {
+    location ~* .(jpe?g|png|gif|ico|css|js|ttf|woff2?)$ {
         expires 365d;
     }
 
