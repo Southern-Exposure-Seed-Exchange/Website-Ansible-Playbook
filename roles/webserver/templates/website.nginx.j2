@@ -125,8 +125,17 @@ server {
     }
 
     # Proxy the Old Images to the Old Server
-    location ~* /images/(.*) {
+    location ~* ^/images/(.*) {
         proxy_pass https://vps.southernexposure.com/images/$1;
+    }
+
+    # Proxy the Newsletter Pages
+    location ^~ /newsletter/ {
+        proxy_pass https://vps.southernexposure.com/newsletter/;
+    }
+    # Proxy the Catalog Pages
+    location ^~ /catalog/ {
+        proxy_pass https://vps.southernexposure.com/catalog/;
     }
 
 
