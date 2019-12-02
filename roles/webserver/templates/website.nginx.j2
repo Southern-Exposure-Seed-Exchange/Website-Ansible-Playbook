@@ -117,7 +117,7 @@ server {
 
     resolver "8.8.8.8";
     # Proxy the Offsite Wordpress Blog
-    location /blog/ {
+    location ^~ /blog/ {
         proxy_pass https://vps.southernexposure.com/blog/;
     }
     location ~* /blog/wp-content/(.*) {
