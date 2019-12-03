@@ -3,7 +3,7 @@ var prerender = require('./lib');
 
 var server = prerender({
   chromeLocation: '/usr/bin/chromium-browser',
-  logRequests: true,
+  logRequests: false,
 });
 
 
