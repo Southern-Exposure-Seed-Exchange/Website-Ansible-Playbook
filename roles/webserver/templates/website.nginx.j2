@@ -7,7 +7,7 @@ server {
     index index.html;
 
     # Logs
-    access_log /var/www/logs/access.log combined buffer=16k;
+    access_log off; # /var/www/logs/access.log combined buffer=16k;
     error_log /var/www/logs/error.log;
 
     # Allow Large Request Bodies
