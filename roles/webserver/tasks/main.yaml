@@ -3,6 +3,7 @@
 - name: Update Package List
   apt:
     update_cache: true
+  tags: basic
   become: true
 
 - name: Install Basic Utilities
@@ -11,8 +12,11 @@
       - acl
       - git
       - htop
+      - iftop
+      - iotop
       - vim
       - python-apt
+  tags: basic
   become: true
 
 - name: Configure Personal User Accounts
