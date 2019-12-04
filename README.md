@@ -17,7 +17,7 @@ group_vars/all/vault`. For convenience, you can put the vault password in a
 the password. A `.gitignore` rule will prevent checking the password file into
 the repository.
 
-To run the playbook, simple run `ansible-playbook playbook.yaml`. By default,
+To run the playbook, simple run `ansible-playbook playbook-configure.yaml`. By default,
 the playbook will run against a local VM that is expected to have a DNS name of
 `sese-www-test.acorn`. Before running the playbook, you should ensure that the
 VM is running and you're computer will resolve the domain name to it. You can
@@ -30,7 +30,7 @@ the host or group name to the `ansible-playbook` command via the `host`
 variable:
 
 ```sh
-ansible-playbook --extra-vars "host=staging" playbook.yaml
+ansible-playbook --extra-vars "host=staging" playbook-configure.yaml
 ```
 
 
