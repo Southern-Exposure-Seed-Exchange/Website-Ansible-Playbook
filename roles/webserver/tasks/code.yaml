@@ -93,16 +93,16 @@
 
 - name: Clone the Website Repository
   git:
-    repo: https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com.git
+    repo: "{{ code_respository }}"
     accept_hostkey: true
-    dest: ~/code
+    dest: "{{ code_location }}"
   become: true
   become_user: sese-website
 
 - name: Ensure the Website Code Has Been Built & Installed Once
   shell: "STRIPE_ENV={{ client_stripe_env | default('test') }} ./manage.hs install"
   args:
-    chdir: ~/code
+    chdir: "{{ code_location }}"
     creates: ~/.local/bin/sese-website-exe
   become: true
   become_user: sese-website
@@ -110,7 +110,7 @@
 - name: Ensure the Client Code Exists in the NGINX Directory
   shell: cp -r * /var/www/client/
   args:
-    chdir: ~/code/client/dist
+    chdir: "{{ code_location }}/client/dist"
     creates: /var/www/client/index.html
   become: true
   become_user: sese-website

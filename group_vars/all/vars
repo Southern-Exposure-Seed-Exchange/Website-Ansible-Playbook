@@ -6,6 +6,9 @@ node_version: 12
 pavans_password: "{{ vault_pavans_password }}"
 msmtp_password: "{{ vault_msmtp_password }}"
 
+code_respository: "https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com.git"
+code_location: "~/code"
+
 
 # Website Secrets
 website_db_password: "{{ vault_website_db_password }}"

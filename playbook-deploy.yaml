@@ -1,0 +1,50 @@
+---
+
+- hosts: '{{ host | default("localtest") }}'
+  any_errors_fatal: true
+  tasks:
+    - name: Ensure the Source Code Repository is Up to Date
+      git:
+        repo: "{{ code_respository }}"
+        version: master
+        dest: "{{ code_location }}"
+        force: true
+        accept_hostkey: true
+      become: true
+      become_user: sese-website
+
+    - name: Build the Server & Client, Install the Server Executable
+      shell: "STRIPE_ENV={{ client_stripe_env | default('test') }} ./manage.hs install"
+      args:
+        chdir: "{{ code_location }}"
+      become: true
+      become_user: sese-website
+      notify: restart api server
+
+    - name: Replace the Client Static Files
+      shell: rm -rf /var/www/client/* && mv client/dist/* /var/www/client/
+      args:
+        chdir: "{{ code_location }}"
+      become: true
+      become_user: sese-website
+      notify: restart prerender server
+
+    - name: Copy the Favicon to the Root Client Directory
+      shell: cp /var/www/client/static/favicon-*/favicon.ico /var/www/client/
+      become: true
+      become_user: sese-website
+
+  handlers:
+    - name: restart api server
+      systemd:
+        name: api-server
+        state: restarted
+      become: true
+    - name: restart prerender server
+      systemd:
+        name: prerender
+        state: restarted
+      become: true
+
+
+# vim: set ft=yaml.ansible :

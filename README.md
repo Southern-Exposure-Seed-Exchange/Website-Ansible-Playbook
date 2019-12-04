@@ -1,10 +1,10 @@
 # SESE Website Playbook
 
-This repository contains the Ansible Playbook we use to configure our Website
-Server.
+This repository contains the Ansible Playbooks we use to configure our Website
+Server & to deploy the lastest Website Code.
 
 
-## Running the Playbook
+## Running the Playbooks
 
 You need `ansible` installed to run this playbook. The `ansible.cfg` in this
 repository will attempt to SSH into the server as your current user and will
@@ -17,15 +17,15 @@ group_vars/all/vault`. For convenience, you can put the vault password in a
 the password. A `.gitignore` rule will prevent checking the password file into
 the repository.
 
-To run the playbook, simple run `ansible-playbook playbook-configure.yaml`. By default,
-the playbook will run against a local VM that is expected to have a DNS name of
-`sese-www-test.acorn`. Before running the playbook, you should ensure that the
-VM is running and you're computer will resolve the domain name to it. You can
-edit your `/etc/hosts` file to point the domain to your VMs IP if you do not
-have access to a DNS server, or edit the `hosts.yaml` file to point to the
-proper domain or IP address.
+To run a playbook, simple run `ansible-playbook <playbook-name>.yaml`. By
+default, the playbooks will run against a local VM that is expected to have a
+DNS name of `sese-www-test.acorn`. Before running the playbook, you should
+ensure that the VM is running and your computer will resolve the domain name
+to it. You can edit your `/etc/hosts` file to point the domain to your VMs IP
+if you do not have access to a DNS server, or edit the `hosts.yaml` file to
+point to the proper domain or IP address.
 
-To run the playbook against our `staging` or `production` hosts, you must pass
+To run a playbook against our `staging` or `production` hosts, you must pass
 the host or group name to the `ansible-playbook` command via the `host`
 variable:
 
@@ -34,9 +34,27 @@ ansible-playbook --extra-vars "host=staging" playbook-configure.yaml
 ```
 
 
-## Tasks
+## Configuration Playbook
+
+`playbook-configure.yaml` is the playbook responsible for configuring a server.
 
 TODO: give overview of tasks
+
+
+## Deployment Playbook
+
+`playbook-deploy.yaml` is the playbook responsible for deploying the lastest
+`master` branch of our repository to a server. It assumes that the
+configuration playbook has already been run on the server at least once.
+
+The deployment playbook will:
+
+* Reset the repository on the server.
+* Pull the latest code.
+* Ensure the local copy has the `master` branch checked out.
+* Make a production build of the client & server.
+* Install the API server & client files.
+* Restart the API server & prerender server.
 
 
 ## License

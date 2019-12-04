@@ -3,3 +3,6 @@
 - hosts: '{{ host | default("localtest") }}'
   roles:
     - webserver
+
+
+# vim: set ft=yaml.ansible :
