@@ -99,11 +99,11 @@
   become: true
   become_user: sese-website
 
-- name: Ensure the Website Code Has Been Built Once
-  shell: "STRIPE_ENV={{ client_stripe_env | default('test') }} ./manage.hs build"
+- name: Ensure the Website Code Has Been Built & Installed Once
+  shell: "STRIPE_ENV={{ client_stripe_env | default('test') }} ./manage.hs install"
   args:
     chdir: ~/code
-    creates: ~/code/server/.stack-work
+    creates: ~/.local/bin/sese-website-exe
   become: true
   become_user: sese-website
 

@@ -2,8 +2,8 @@
 Description=SESE Website API Server
 
 [Service]
-ExecStart=/usr/bin/stack exec sese-website-exe
-WorkingDirectory=/home/sese-website/code/server
+ExecStart=/home/sese-website/.local/bin/sese-website-exe
+WorkingDirectory=/home/sese-website/
 
 Restart=always
 RestartSec=5
