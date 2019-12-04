@@ -25,6 +25,7 @@
       shell: rm -rf /var/www/client/* && mv client/dist/* /var/www/client/
       args:
         chdir: "{{ code_location }}"
+        warn: false
       become: true
       become_user: sese-website
       notify: restart prerender server
