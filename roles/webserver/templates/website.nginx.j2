@@ -99,6 +99,12 @@ server {
     location ^~ /media {
         root /var/www;
 
+        # Enable Chunked Data Copying Directly from File to Client
+        sendfile on;
+        sendfile_max_chunk 1m;
+        # Include Response Headers with First Chunk
+        tcp_nopush on;
+
         # Long-term Caching
         location ~* .(jpe?g|png|gif|ico|css|js|ttf|woff2?)$ {
             expires 365d;
