@@ -53,26 +53,3 @@
     src: roles/webserver/files/logrotate_webserver
     dest: /etc/logrotate.d/webserver
   become: true
-
-- name: Ensure Certbot Repository is Enabled
-  apt_repository:
-    repo: "ppa:certbot/certbot"
-    filename: certbot
-  when: use_letsencrypt
-  become: true
-
-- name: Ensure Certbot is Installed
-  apt:
-    name:
-      - certbot
-      - python-certbot-nginx
-    update_cache: true
-  when: use_letsencrypt
-  become: true
-
-- name: Ensure LetsEncrypt SSL Certificates Have Been Generated
-  shell: "certbot certonly --nginx -n --agree-tos -m webmaster@southernexposure.com -d {{ letsencrypt_domains }}"
-  args:
-    creates: "/etc/letsencrypt/live/{{ inventory_hostname }}"
-  when: use_letsencrypt
-  become: true
