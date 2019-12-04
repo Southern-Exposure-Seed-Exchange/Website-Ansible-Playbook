@@ -1,7 +1,7 @@
 /var/www/logs/*.log
 {
-    rotate 6
-    weekly
+    rotate 7
+    daily
     size 50M
     missingok
     notifempty
