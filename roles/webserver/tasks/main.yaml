@@ -31,6 +31,10 @@
   import_tasks: nginx.yaml
   tags: nginx
 
+- name: Configure Certbot
+  import_tasks: certbot.yaml
+  tags: certbot
+
 - name: Configure Database
   import_tasks: database.yaml
   tags: database.yaml
