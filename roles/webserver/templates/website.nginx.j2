@@ -125,6 +125,8 @@ server {
     # Proxy the Offsite Wordpress Blog
     location ^~ /blog/ {
         proxy_pass https://vps.southernexposure.com/blog/;
+        proxy_set_header X-Forwarded-For $remote_addr;
+        proxy_set_header X-Real-IP $remote_addr;
     }
     location ~* /blog/wp-content/(.*) {
         proxy_pass https://vps.southernexposure.com/blog/wp-content/$1;
