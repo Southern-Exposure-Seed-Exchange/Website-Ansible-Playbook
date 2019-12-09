@@ -25,3 +25,9 @@
     name: nginx
     state: restarted
   become: true
+
+- name: restart postgresql
+  systemd:
+    name: postgresql
+    state: restarted
+  become: true

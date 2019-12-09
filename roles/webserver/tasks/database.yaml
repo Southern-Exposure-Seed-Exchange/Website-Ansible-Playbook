@@ -25,3 +25,40 @@
     owner: sese-website
   become: true
   become_user: postgres
+
+- name: Ensure PostgreSQL Is Correctly Configured
+  lineinfile:
+    path: /etc/postgresql/10/main/postgresql.conf
+    regexp: "{{ item.regexp }}"
+    line: "{{ item.line }}"
+  with_items:
+    - regexp: "^#?max_connections =.*$"
+      line: "max_connections = 40"
+    - regexp: "^#?shared_buffers =.*$"
+      line: "shared_buffers = 2500MB"
+    - regexp: "^#?effective_cache_size =.*$"
+      line: "effective_cache_size = 6GB"
+    - regexp: "^#?maintenance_work_mem =.*$"
+      line: "maintenance_work_mem = 512MB"
+    - regexp: "^#?checkpoint_completion_target =.*$"
+      line: "checkpoint_completion_target = 0.7"
+    - regexp: "^#?wal_buffers =.*$"
+      line: "wal_buffers = 16MB"
+    - regexp: "^#?random_page_cost =.*$"
+      line: "random_page_cost = 1.1"
+    - regexp: "^#?effective_io_concurrency =.*$"
+      line: "effective_io_concurrency = 200"
+    - regexp: "^#?work_mem =.*$"
+      line: "work_mem = 26214kB"
+    - regexp: "^#?min_wal_size =.*$"
+      line: "min_wal_size = 1GB"
+    - regexp: "^#?max_wal_size =.*$"
+      line: "max_wal_size = 2GB"
+    - regexp: "^#?max_worker_processes =.*$"
+      line: "max_worker_processes = 4"
+    - regexp: "^#?max_parallel_workers_per_gather =.*$"
+      line: "max_parallel_workers_per_gather = 2"
+    - regexp: "^#?max_parallel_workers =.*$"
+      line: "max_parallel_workers = 4"
+  notify: restart postgresql
+  become: true
