@@ -154,66 +154,66 @@ server {
 
 
     # Redirects for Old Site's URLs
-    rewrite ^/[A-Za-z0-9-]+?-c-[0-9_]*?([0-9]+).html$ /api/redirects/category/$1 redirect;
-    rewrite ^/[A-Za-z0-9-]+?-p-([0-9]+).html$ /api/redirects/product/$1 redirect;
-    rewrite ^/[A-Za-z0-9-]+?-ezp-([0-9]+).html$ /api/redirects/page/$1 redirect;
-    rewrite ^/contact_us.html$ /contact-us/ redirect;
+    rewrite ^/[A-Za-z0-9-]+?-c-[0-9_]*?([0-9]+).html$ /api/redirects/category/$1 permanent;
+    rewrite ^/[A-Za-z0-9-]+?-p-([0-9]+).html$ /api/redirects/product/$1 permanent;
+    rewrite ^/[A-Za-z0-9-]+?-ezp-([0-9]+).html$ /api/redirects/page/$1 permanent;
+    rewrite ^/contact_us.html$ /contact-us/ permanent;
     location = /index.php {
         if ($args ~* "main_page=quick_order") {
             set $args "";
-            rewrite ^.*$ /quick-order/ redirect;
+            rewrite ^.*$ /quick-order/ permanent;
         }
         if ($args ~* "main_page=login") {
             set $args "";
-            rewrite ^.*$ /account/login/ redirect;
+            rewrite ^.*$ /account/login/ permanent;
         }
         if ($args ~* "main_page=create_account") {
             set $args "";
-            rewrite ^.*$ /account/create/ redirect;
+            rewrite ^.*$ /account/create/ permanent;
         }
         if ($args ~* "main_page=account") {
             set $args "";
-            rewrite ^.*$ /account/ redirect;
+            rewrite ^.*$ /account/ permanent;
         }
         if ($args ~* "main_page=advanced_search(&.*)?$") {
             set $args "";
-            rewrite ^.*$ /search/advanced/ redirect;
+            rewrite ^.*$ /search/advanced/ permanent;
         }
         if ($args ~* "main_page=advanced_search_result&.*?keyword=(?<query>[a-zA-Z0-9]+)") {
             set $args "";
-            rewrite ^.*$ /search/?q=$query redirect;
+            rewrite ^.*$ /search/?q=$query permanent;
         }
         if ($args ~* "main_page=page&id=(?<id>[0-9]+)") {
             set $args "";
-            rewrite ^.*$ /api/redirects/page/$id redirect;
+            rewrite ^.*$ /api/redirects/page/$id permanent;
         }
         if ($args ~* "main_page=index&cPath=[0-9_]*?(?<id>[0-9]+)[^_]") {
             set $args "";
-            rewrite ^.*$ /api/redirects/category/$id redirect;
+            rewrite ^.*$ /api/redirects/category/$id permanent;
         }
         if ($args ~* "main_page=product_info(&.*?)?&products_id=(?<id>[0-9]+)") {
             set $args "";
-            rewrite ^.*$ /api/redirects/product/$id redirect;
+            rewrite ^.*$ /api/redirects/product/$id permanent;
         }
         if ($args ~* "main_page=products_all") {
             set $args "";
-            rewrite ^.*$ /all-products/ redirect;
+            rewrite ^.*$ /all-products/ permanent;
         }
         if ($args ~* "main_page=products_all&organic=1") {
             set $args "";
-            rewrite ^.*$ /organic/ redirect;
+            rewrite ^.*$ /organic/ permanent;
         }
         if ($args ~* "main_page=products_all&heirloom=1") {
             set $args "";
-            rewrite ^.*$ /heirloom/ redirect;
+            rewrite ^.*$ /heirloom/ permanent;
         }
         if ($args ~* "main_page=products_all&southern=1") {
             set $args "";
-            rewrite ^.*$ /south-east/ redirect;
+            rewrite ^.*$ /south-east/ permanent;
         }
         if ($args ~* "main_page=products_all&small-grower=1") {
             set $args "";
-            rewrite ^.*$ /small-grower/ redirect;
+            rewrite ^.*$ /small-grower/ permanent;
         }
     }
 }
