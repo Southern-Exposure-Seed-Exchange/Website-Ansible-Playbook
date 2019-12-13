@@ -23,7 +23,7 @@
 - name: restart nginx
   systemd:
     name: nginx
-    state: restarted
+    state: reloaded
   become: true
 
 - name: restart postgresql
