@@ -108,6 +108,8 @@ server {
         # Long-term Caching
         location ~* .(jpe?g|png|gif|ico|css|js|ttf|woff2?)$ {
             expires 365d;
+            # Fix Double /media/ prefix
+            rewrite ^/media(/media/.*)$ $1 permanent;
         }
     }
 
