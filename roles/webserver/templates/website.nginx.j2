@@ -187,7 +187,7 @@ server {
             set $args "";
             rewrite ^.*$ /api/redirects/page/$id permanent;
         }
-        if ($args ~* "main_page=index&cPath=[0-9_]*?(?<id>[0-9]+)[^_]") {
+        if ($args ~* "main_page=index&cPath=[0-9_]*?(?<id>[0-9]+)[^0-9_]*") {
             set $args "";
             rewrite ^.*$ /api/redirects/category/$id permanent;
         }
@@ -215,6 +215,7 @@ server {
             set $args "";
             rewrite ^.*$ /small-grower/ permanent;
         }
+        rewrite ^.*$ / permanent;
     }
 }
 
