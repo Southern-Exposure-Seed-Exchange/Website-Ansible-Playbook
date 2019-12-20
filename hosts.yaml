@@ -5,7 +5,7 @@ production:
         www.southernexposure.com:
             stripe_token: "{{ vault_stripe_prod_token }}"
             client_stripe_env: production
-            avatax_status: AvalaraDisabled
+            avatax_status: AvalaraTesting
             avatax_environment: production
             avatax_license_key: "{{ vault_avatax_production_key }}"
             avatax_account_id: "{{ vault_avatax_production_account_id }}"
