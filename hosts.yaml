@@ -7,6 +7,10 @@ production:
             client_stripe_env: production
             avatax_status: AvalaraDisabled
             avatax_environment: production
+            avatax_license_key: "{{ vault_avatax_production_key }}"
+            avatax_account_id: "{{ vault_avatax_production_account_id }}"
+            avatax_company_id: "{{ vault_avatax_production_company_id }}"
+            avatax_company_code: "{{ vault_avatax_production_company_code }}"
             use_letsencrypt: true
             letsencrypt_domains: "www.southernexposure.com,southernexposure.com,wwwvps.southernexposure.com"
 
@@ -17,6 +21,10 @@ staging:
             client_stripe_env: test
             avatax_environment: sandbox
             avatax_status: AvalaraTesting
+            avatax_license_key: "{{ vault_avatax_sandbox_key }}"
+            avatax_account_id: "{{ vault_avatax_sandbox_account_id }}"
+            avatax_company_id: "{{ vault_avatax_sandbox_company_id }}"
+            avatax_company_code: "{{ vault_avatax_sandbox_company_code }}"
             use_letsencrypt: true
             letsencrypt_domains: "staging.southernexposure.com"
 
@@ -27,5 +35,9 @@ localtest:
             client_stripe_env: test
             avatax_environment: sandbox
             avatax_status: AvalaraTesting
+            avatax_license_key: "{{ vault_avatax_sandbox_key }}"
+            avatax_account_id: "{{ vault_avatax_sandbox_account_id }}"
+            avatax_company_id: "{{ vault_avatax_sandbox_company_id }}"
+            avatax_company_code: "{{ vault_avatax_sandbox_company_code }}"
             use_letsencrypt: false
             letsencrypt_domains: ""

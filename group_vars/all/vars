@@ -19,8 +19,3 @@ cookie_secret: "{{ vault_cookie_secret }}"
 stone_edge_user: "{{ vault_stone_edge_user }}"
 stone_edge_pass: "{{ vault_stone_edge_pass }}"
 stone_edge_code: "{{ vault_stone_edge_code }}"
-# Avalara
-avatax_account_id: "{{ vault_avatax_account_id }}"
-avatax_license_key: "{{ vault_avatax_license_key }}"
-avatax_company_id: "{{ vault_avatax_company_id }}"
-avatax_company_code: "{{ vault_avatax_company_code }}"
