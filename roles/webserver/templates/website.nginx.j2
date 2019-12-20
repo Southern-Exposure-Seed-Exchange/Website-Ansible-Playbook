@@ -64,6 +64,10 @@ server {
     location / {
         try_files $uri @prerender;
     }
+    # Never cache the index.html file
+    location = /index.html {
+        expires -1;
+    }
 
     # Prerender config is lifted from the official NGINX middleware gist
     location @prerender {
@@ -91,6 +95,7 @@ server {
             proxy_pass http://127.0.0.1:5000;
         }
         if ($prerender = 0) {
+            expires -1;
             rewrite .* /index.html break;
         }
     }
