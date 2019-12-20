@@ -153,6 +153,11 @@ server {
         proxy_pass https://vps.southernexposure.com/catalog/;
     }
 
+    # Proxy the Growing Guide PDFs
+    location ~* ^/growing-guides/(.*)$ {
+        proxy_pass https://vps.southernexposure.com/growing-guides/$1;
+    }
+
 
     # Cache Static Assets for a Long Time
     location ~* .(jpe?g|png|gif|ico|css|js|ttf|woff2?)$ {
