@@ -22,7 +22,7 @@
       notify: restart api server
 
     - name: Replace the Client Static Files
-      shell: rm -rf /var/www/client/* && mv client/dist/* /var/www/client/
+      shell: rm -rf /var/www/client/* && cp -r client/dist/* /var/www/client/
       args:
         chdir: "{{ code_location }}"
         warn: false
