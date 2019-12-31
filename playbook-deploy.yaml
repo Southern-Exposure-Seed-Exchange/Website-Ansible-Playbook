@@ -30,8 +30,8 @@
       become_user: sese-website
       notify: restart prerender server
 
-    - name: Copy the Favicon to the Root Client Directory
-      shell: cp /var/www/client/static/favicon-*/favicon.ico /var/www/client/
+    - name: Copy the Favicons to the Root Client Directory
+      shell: cp /var/www/client/static/favicon-*/* /var/www/client/
       become: true
       become_user: sese-website
 
