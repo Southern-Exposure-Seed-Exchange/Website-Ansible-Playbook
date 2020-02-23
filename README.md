@@ -38,7 +38,24 @@ ansible-playbook --extra-vars "host=staging" playbook-configure.yaml
 
 `playbook-configure.yaml` is the playbook responsible for configuring a server.
 
-TODO: give overview of tasks
+The playbook will:
+
+* Install basic sysadmin tools
+* Setup user accounts for administrators
+* Configure MSMTP for sending emails
+* Enable unattended package upgrades for security updates
+* Harden the SSH server
+* Configure the ufw firewall
+* Install nginx & configure it to proxy the API server and serve the static
+  files
+* Install & configure certbot for generating nginx's SSL certificates
+* Install PostgreSQL, setup the database for the API server, & tune the
+  configuration for performance
+* Install Stack & NodeJS, create a user for the website, clone & build the
+  website code, deploy the static files, and configure & install a systemd
+  service for the API server
+* Setup a local Prerender instance with systemd to handle server side rendering
+  for web crawlers and bots
 
 
 ## Deployment Playbook
