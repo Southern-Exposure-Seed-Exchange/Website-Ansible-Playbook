@@ -154,7 +154,7 @@ server {
     }
 
     # Proxy the Growing Guide PDFs
-    location ~* ^/growing-guides/(.*)$ {
+    location ~* ^/growing-guides/(.+)$ {
         proxy_pass https://vps.southernexposure.com/growing-guides/$1;
     }
 
