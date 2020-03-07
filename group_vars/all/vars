@@ -1,7 +1,7 @@
 ---
 
 distro_version: bionic
-node_version: 12
+node_version: 13
 
 pavans_password: "{{ vault_pavans_password }}"
 msmtp_password: "{{ vault_msmtp_password }}"
