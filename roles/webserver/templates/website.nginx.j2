@@ -86,7 +86,7 @@ server {
             set $prerender 0;
         }
         # And we ignore some known static directories
-        if ($uri ~* "^/(blog|media|images|api|static)") {
+        if ($uri ~* "^/(blog|media|images|api|static|organic-certificates)") {
             set $prerender 0;
         }
 
@@ -151,6 +151,11 @@ server {
     # Proxy the Catalog Pages
     location ^~ /catalog/ {
         proxy_pass https://vps.southernexposure.com/catalog/;
+    }
+
+    # Proxy the Organic Certificates
+    location ~* ^/organic-certificates/(.+)$ {
+        proxy_pass https://vps.southernexposure.com/organic-certificates/$1;
     }
 
     # Proxy the Growing Guide PDFs
