@@ -4,6 +4,7 @@ distro_version: bionic
 node_version: 13
 
 pavans_password: "{{ vault_pavans_password }}"
+sese_password: "{{ vault_sese_password }}"
 msmtp_password: "{{ vault_msmtp_password }}"
 
 code_respository: "https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com.git"
