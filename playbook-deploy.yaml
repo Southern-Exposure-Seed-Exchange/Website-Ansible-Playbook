@@ -12,6 +12,7 @@
         accept_hostkey: true
       become: true
       become_user: sese-website
+      tags: build
 
     - name: Build the Server & Client, Install the Server Executable
       shell: "STRIPE_ENV={{ client_stripe_env | default('test') }} ./manage.hs install"
@@ -19,7 +20,23 @@
         chdir: "{{ code_location }}"
       become: true
       become_user: sese-website
-      notify: restart api server
+      tags: build
+
+    - name: Install the Environment File for the API Server
+      template:
+        dest: ~/website-env
+        src: roles/webserver/templates/website-env.j2
+        mode: '0600'
+      become: true
+      become_user: sese-website
+      tags: build
+
+    - name: Ensure the latest API Server Code is Running
+      systemd:
+        name: api-server
+        state: restarted
+      become: true
+      tags: deploy
 
     - name: Replace the Client Static Files
       shell: rm -rf /var/www/client/* && cp -r client/dist/* /var/www/client/
@@ -29,18 +46,15 @@
       become: true
       become_user: sese-website
       notify: restart prerender server
+      tags: deploy
 
     - name: Copy the Favicons to the Root Client Directory
       shell: cp /var/www/client/static/favicon-*/* /var/www/client/
       become: true
       become_user: sese-website
+      tags: deploy
 
   handlers:
-    - name: restart api server
-      systemd:
-        name: api-server
-        state: restarted
-      become: true
     - name: restart prerender server
       systemd:
         name: prerender
