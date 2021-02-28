@@ -2,9 +2,9 @@ ENV=Production
 MEDIA=/var/www/media
 LOGS=/var/www/logs
 STRIPE_TOKEN={{ stripe_token }}
-SMTP_SERVER=mail.southernexposure.com
-SMTP_USER={{ smtp_user }}
-SMTP_PASS={{ smtp_pass }}
+SMTP_SERVER='smtp.mailgun.org'
+SMTP_USER='{{ smtp_user }}'
+SMTP_PASS='{{ smtp_pass }}'
 COOKIE_SECRET={{ cookie_secret }}
 
 STONE_EDGE_USER={{ stone_edge_user }}
