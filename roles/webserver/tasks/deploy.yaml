@@ -1,0 +1,8 @@
+---
+
+- name: Add deploy user
+  ansible.builtin.user:
+    name: deploy
+    groups:
+      - docker
+  become: true

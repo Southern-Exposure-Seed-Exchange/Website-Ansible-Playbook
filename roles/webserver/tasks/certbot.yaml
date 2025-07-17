@@ -1,24 +1,33 @@
 ---
 
-- name: Ensure Certbot Repository is Enabled
-  apt_repository:
-    repo: "ppa:certbot/certbot"
-    filename: certbot
-  when: use_letsencrypt
+- name: Install certbot snap
+  community.general.snap:
+    name: certbot
+    classic: true
+    state: present
   become: true
 
-- name: Ensure Certbot is Installed
-  apt:
-    name:
-      - certbot
-      - python-certbot-nginx
-    update_cache: true
-  when: use_letsencrypt
+- name: Prepare certbot binary
+  ansible.builtin.file:
+    src: /snap/bin/certbot
+    dest: /usr/bin/certbot
+    state: link
   become: true
 
 - name: Ensure LetsEncrypt SSL Certificates Have Been Generated
-  shell: "certbot certonly --nginx -n --agree-tos -m webmaster@southernexposure.com -d {{ letsencrypt_domains }}"
+  ansible.builtin.command: certbot certonly --nginx -n --agree-tos -m webmaster@southernexposure.com -d {{ letsencrypt_domains }}
   args:
     creates: "/etc/letsencrypt/live/{{ inventory_hostname }}"
+  when: use_letsencrypt
+  become: true
+
+- name: Periodically Renew SSL Certificates
+  ansible.builtin.cron:
+    name: "certbot_renew"
+    minute: "0"
+    hour: "0"
+    day: "*"
+    job: "certbot renew --quiet --nginx"
+    state: present
   when: use_letsencrypt
   become: true

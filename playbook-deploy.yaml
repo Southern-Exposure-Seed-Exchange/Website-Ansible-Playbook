@@ -1,65 +1,58 @@
 ---
 
-- hosts: '{{ host | default("localtest") }}'
+- name: Deploy the Website Code using Docker Compose
+  hosts: '{{ host | default("localtest") }}'
   any_errors_fatal: true
   tasks:
     - name: Ensure the Source Code Repository is Up to Date
-      git:
+      ansible.builtin.git:
         repo: "{{ code_respository }}"
-        version: master
+        version: "{{ commit }}"
         dest: "{{ code_location }}"
         force: true
         accept_hostkey: true
       become: true
-      become_user: sese-website
-      tags: build
-
-    - name: Build the Server & Client, Install the Server Executable
-      shell: "STRIPE_ENV={{ client_stripe_env | default('test') }} ./manage.hs install"
-      args:
-        chdir: "{{ code_location }}"
-      become: true
-      become_user: sese-website
-      tags: build
+      become_user: deploy
 
     - name: Install the Environment File for the API Server
-      template:
-        dest: ~/website-env
+      ansible.builtin.template:
+        dest: "{{ code_location }}/website-env"
         src: roles/webserver/templates/website-env.j2
         mode: '0600'
       become: true
-      become_user: sese-website
+      become_user: deploy
       tags: build
 
-    - name: Ensure the latest API Server Code is Running
-      systemd:
-        name: api-server
-        state: restarted
+    - name: Docker login to ghcr.io
+      community.docker.docker_login:
+        registry_url: "https://ghcr.io/v2/"
+        username: "{{ ghcr_username }}"
+        password: "{{ ghcr_token }}"
+        state: present
+        reauthorize: true
       become: true
-      tags: deploy
+      become_user: deploy
 
-    - name: Replace the Client Static Files
-      shell: rm -rf /var/www/client/* && cp -r client/dist/* /var/www/client/
-      args:
-        chdir: "{{ code_location }}"
-        warn: false
+    - name: Docker Compose up
+      community.docker.docker_compose_v2:
+        project_src: "{{ code_location }}"
+        state: present
+        wait: true
+        wait_timeout: 30
+        env_files:
+          - website-env
       become: true
-      become_user: sese-website
-      notify: restart prerender server
+      become_user: deploy
       tags: deploy
-
-    - name: Copy the Favicons to the Root Client Directory
-      shell: cp /var/www/client/static/favicon-*/* /var/www/client/
-      become: true
-      become_user: sese-website
-      tags: deploy
+      notify:
+        - Restart prerender container
 
   handlers:
-    - name: restart prerender server
-      systemd:
+    - name: Restart prerender container
+      community.docker.docker_container:
         name: prerender
-        state: restarted
+        restart: true
       become: true
-
+      become_user: deploy
 
 # vim: set ft=yaml.ansible :

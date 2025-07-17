@@ -2,8 +2,10 @@
 
 production:
     hosts:
-        www.southernexposure.com:
+        new.southernexposure.com:
             stripe_token: "{{ vault_stripe_prod_token }}"
+            helcim_token: "{{ vault_helcim_prod_token }}"
+            postgrid_api_key: "{{ vault_postgrid_production_key }}"
             client_stripe_env: production
             avatax_status: AvalaraEnabled
             avatax_environment: production
@@ -12,12 +14,21 @@ production:
             avatax_company_id: "{{ vault_avatax_production_company_id }}"
             avatax_company_code: "{{ vault_avatax_production_company_code }}"
             use_letsencrypt: true
-            letsencrypt_domains: "www.southernexposure.com,southernexposure.com,wwwvps.southernexposure.com"
+            letsencrypt_domains: "new.southernexposure.com,www.southernexposure.com,southernexposure.com,wwwvps.southernexposure.com"
+            db_host: "{{ vault_production_db_host }}"
+            db_port: "{{ vault_production_db_port }}"
+            db_name: "{{ vault_production_db_name }}"
+            db_user: "{{ vault_production_db_user }}"
+            db_pass: "{{ vault_production_db_pass }}"
+            base_url: "https://southernexposure.com"
+            sese_password: "{{ vault_sese_production_password }}"
 
 staging:
     hosts:
-        staging.southernexposure.com:
+        new-staging.southernexposure.com:
             stripe_token: "{{ vault_stripe_test_token }}"
+            helcim_token: "{{ vault_helcim_test_token }}"
+            postgrid_api_key: "{{ vault_postgrid_staging_key }}"
             client_stripe_env: test
             avatax_environment: sandbox
             avatax_status: AvalaraEnabled
@@ -26,7 +37,14 @@ staging:
             avatax_company_id: "{{ vault_avatax_sandbox_company_id }}"
             avatax_company_code: "{{ vault_avatax_sandbox_company_code }}"
             use_letsencrypt: true
-            letsencrypt_domains: "staging.southernexposure.com"
+            letsencrypt_domains: "new-staging.southernexposure.com"
+            db_host: "{{ vault_staging_db_host }}"
+            db_port: "{{ vault_staging_db_port }}"
+            db_name: "{{ vault_staging_db_name }}"
+            db_user: "{{ vault_staging_db_user }}"
+            db_pass: "{{ vault_staging_db_pass }}"
+            base_url: "https://new-staging.southernexposure.com"
+            sese_password: "{{ vault_sese_password }}"
 
 localtest:
     hosts:
@@ -41,3 +59,4 @@ localtest:
             avatax_company_code: "{{ vault_avatax_sandbox_company_code }}"
             use_letsencrypt: false
             letsencrypt_domains: ""
+            sese_password: "{{ vault_sese_password }}"

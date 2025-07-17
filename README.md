@@ -41,20 +41,14 @@ ansible-playbook --extra-vars "host=staging" playbook-configure.yaml
 The playbook will:
 
 * Install basic sysadmin tools
-* Setup user accounts for administrators
-* Configure MSMTP for sending emails
+* Install Docker
+* Setup user account `sese` for administrators
 * Enable unattended package upgrades for security updates
 * Harden the SSH server
 * Configure the ufw firewall
-* Install nginx & configure it to proxy the API server and serve the static
-  files
+* Install nginx & configure it to proxy the backend and frontend running in Docker containers with ports exposed to `localhost`
 * Install & configure certbot for generating nginx's SSL certificates
-* Install PostgreSQL, setup the database for the API server, & tune the
-  configuration for performance
-* Install Stack & NodeJS, create a user for the website, clone & build the
-  website code, deploy the static files, and configure & install a systemd
-  service for the API server
-* Setup a local Prerender instance with systemd to handle server side rendering
+* Setup a local Prerender instance with Docker container to handle server side rendering
   for web crawlers and bots
 
 
@@ -67,12 +61,16 @@ configuration playbook has already been run on the server at least once.
 The deployment playbook will:
 
 * Reset the repository on the server.
-* Pull the latest code.
-* Ensure the local copy has the `master` branch checked out.
-* Make a production build of the client & server.
-* Install the API server & client files.
-* Restart the API server & prerender server.
+* Pull the specified commit.
+* Bring up Docker compose configuration
 
+E.g.
+```
+ansible-playbook --extra-vars "host=staging" --extra-vars "commit=<sha>" playbook-deploy.yaml -u sese
+```
+
+Make sure to use commits from `master` branch for `production` updates, and `develop` branch for `staging` updates
+since the frontend image is built using the corresponding env variables.
 
 ## License
 

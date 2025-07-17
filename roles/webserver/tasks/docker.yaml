@@ -1,0 +1,45 @@
+---
+
+- name: Install required system packages
+  ansible.builtin.apt:
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - python3-pip
+      - virtualenv
+      - python3-setuptools
+    state: present
+  become: true
+
+- name: Add Docker GPG apt Key
+  ansible.builtin.apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+  become: true
+
+- name: Add Docker Repository
+  ansible.builtin.apt_repository:
+    repo: deb https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+    state: present
+  become: true
+
+- name: Update apt and install docker-ce
+  ansible.builtin.apt:
+    pkg:
+      - docker-ce
+      - docker-compose-plugin
+      - python3-docker
+    state: present
+  become: true
+
+- name: Prune docker resources unused for the last 24h
+  ansible.builtin.cron:
+    name: "docker_prune"
+    minute: "0"
+    hour: "0"
+    day: "*"
+    job: "docker system prune --all --force --filter=\"until=24h\""
+    state: present
+  become: true

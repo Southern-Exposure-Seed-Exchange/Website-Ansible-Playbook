@@ -1,10 +1,19 @@
+upstream frontend {
+    server 127.0.0.1:8080;
+}
+
+upstream prerender {
+    server 127.0.0.1:5000;
+}
+
+upstream backend {
+    server 127.0.0.1:3000;
+}
+
 server {
     listen [::]:443 ssl http2 default_server ipv6only=off;
 
     server_name _;
-
-    root /var/www/client;
-    index index.html;
 
     # Logs
     access_log off; # /var/www/logs/access.log combined buffer=16k;
@@ -62,15 +71,6 @@ server {
 
     # Fallback to Client's index.html
     location / {
-        try_files $uri @prerender;
-    }
-    # Never cache the index.html file
-    location = /index.html {
-        expires -1;
-    }
-
-    # Prerender config is lifted from the official NGINX middleware gist
-    location @prerender {
         set $prerender 0;
         # But we added some user agents to this list
         if ($http_user_agent ~* "googlebot|bingbot|yandex|baiduspider|twitterbot|facebookexternalhit|rogerbot|linkedinbot|embedly|quora link preview|showyoubot|outbrain|pinterest\/0\.|pinterestbot|slackbot|vkShare|W3C_Validator|whatsapp|redditbot|discordbot|duckduckbot|slurp|exabot|facebot|ia_archiver|adsbot|bingpreview|google-structured-data-testing-tool|mediapartners-google|seobilitybot") {
@@ -91,13 +91,29 @@ server {
         }
 
         if ($prerender = 1) {
-            rewrite .* /$scheme://$host$request_uri? break;
-            proxy_pass http://127.0.0.1:5000;
+            rewrite ^ /prerender$request_uri last;
         }
-        if ($prerender = 0) {
-            expires -1;
-            rewrite .* /index.html break;
-        }
+
+        proxy_pass http://frontend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    }
+
+    location /prerender {
+        internal;
+        proxy_pass http://prerender;
+        # Remove the /prerender prefix from the URI
+        rewrite ^/prerender(.*) /$scheme://$host$1? break;
+    }
+
+    # Never cache the index.html file
+    location = /index.html {
+        expires -1;
+        proxy_pass http://frontend;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
     # Serve Media from /var/www/media
@@ -120,7 +136,10 @@ server {
 
     # Proxy the API Server
     location /api/ {
-        proxy_pass http://127.0.0.1:3000/;
+        proxy_pass http://backend/;
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
     }
 
     # Redirect the Sitemap & Google Merchant Feed
@@ -131,41 +150,42 @@ server {
     resolver "8.8.8.8";
     # Proxy the Offsite Wordpress Blog
     location ^~ /blog/ {
-        proxy_pass https://vps.southernexposure.com/blog/;
+        proxy_pass https://blog.southernexposure.com/;
         proxy_set_header X-Forwarded-For $remote_addr;
         proxy_set_header X-Real-IP $remote_addr;
     }
     location ~* /blog/wp-content/(.*) {
-        proxy_pass https://vps.southernexposure.com/blog/wp-content/$1;
+        proxy_pass https://blog.southernexposure.com/wp-content/$1;
     }
 
     # Proxy the Old Images to the Old Server
     location ~* ^/images/(.*) {
-        proxy_pass https://vps.southernexposure.com/images/$1;
+        proxy_pass https://blog.southernexposure.com/wp-content/uploads/images/$1;
     }
 
     # Proxy the Newsletter Pages
     location ^~ /newsletter/ {
-        proxy_pass https://vps.southernexposure.com/newsletter/;
+        proxy_pass https://blog.southernexposure.com/wp-content/uploads/newsletter/;
     }
     # Proxy the Catalog Pages
     location ^~ /catalog/ {
-        proxy_pass https://vps.southernexposure.com/catalog/;
+        proxy_pass https://blog.southernexposure.com/wp-content/uploads/catalog/;
     }
 
     # Proxy the Organic Certificates
     location ~* ^/organic-certificates/(.+)$ {
-        proxy_pass https://vps.southernexposure.com/organic-certificates/$1;
+        proxy_pass https://blog.southernexposure.com/wp-content/uploads/organic-certificates/$1;
     }
 
     # Proxy the Growing Guide PDFs
     location ~* ^/growing-guides/(.+)$ {
-        proxy_pass https://vps.southernexposure.com/growing-guides/$1;
+        proxy_pass https://blog.southernexposure.com/wp-content/uploads/growing-guides/$1;
     }
 
 
     # Cache Static Assets for a Long Time
     location ~* .(jpe?g|png|gif|ico|css|js|ttf|woff2?)$ {
+        proxy_pass http://frontend;
         expires 365d;
     }
 

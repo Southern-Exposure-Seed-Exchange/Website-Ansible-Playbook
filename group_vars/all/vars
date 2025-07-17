@@ -1,15 +1,7 @@
 ---
 
-distro_version: bionic
-node_version: 13
-
-pavans_password: "{{ vault_pavans_password }}"
-sese_password: "{{ vault_sese_password }}"
-msmtp_password: "{{ vault_msmtp_password }}"
-
 code_respository: "https://github.com/Southern-Exposure-Seed-Exchange/southernexposure.com.git"
 code_location: "~/code"
-
 
 # Website Secrets
 website_db_password: "{{ vault_website_db_password }}"
@@ -20,3 +12,7 @@ cookie_secret: "{{ vault_cookie_secret }}"
 stone_edge_user: "{{ vault_stone_edge_user }}"
 stone_edge_pass: "{{ vault_stone_edge_pass }}"
 stone_edge_code: "{{ vault_stone_edge_code }}"
+
+# GHCR Credentials
+ghcr_username: "{{ vault_ghcr_username }}"
+ghcr_token: "{{ vault_ghcr_token }}"
