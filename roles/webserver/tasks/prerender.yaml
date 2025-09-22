@@ -1,59 +1,15 @@
 ---
 
-- name: Create the Prerender User
-  user:
+- name: Run prerender container
+  community.docker.docker_container:
     name: prerender
-    shell: "/bin/bash"
-  become: true
-
-- name: Install Prerender Browser
-  apt:
-    name: chromium-browser
-  become: true
-
-- name: Clone the Prerender Repository
-  git:
-    repo: https://github.com/prerender/prerender.git
-    accept_hostkey: true
-    dest: ~/server
-    force: true
-  notify: restart prerender
-  become: true
-  become_user: prerender
-
-- name: Install the Prerender Dependencies
-  npm:
-    path: ~/server/
-  notify: restart prerender
-  become: true
-  become_user: prerender
-
-- name: Install Prerender Plugins
-  npm:
-    name: prerender-memory-cache
-    path: ~/server/
-  notify: restart prerender
-  become: true
-  become_user: prerender
-
-- name: Install the Custom Prerender Server Script
-  copy:
-    src: roles/webserver/files/prerender_server.js
-    dest: ~/server/custom_server.js
-  notify: restart prerender
-  become: true
-  become_user: prerender
-
-- name: Install the Prerender SystemD Service
-  copy:
-    src: roles/webserver/files/systemd_prerender.service
-    dest: /etc/systemd/system/prerender.service
-  notify: restart prerender
-  become: true
-
-- name: Ensure Prerender SystemD Service is Enabled & Started
-  systemd:
-    name: prerender
+    image: tvanro/prerender-alpine:7.1.0
     state: started
-    enabled: true
+    restart_policy: always
+    ports:
+      - "127.0.0.1:5000:3000"
+    cpus: 1
+    memory: 1G
+    env:
+      MEMORY_CACHE: "1"
   become: true

@@ -8,3 +8,14 @@
     create
     compress
 }
+
+/var/www/backend-logs/*.log
+{
+    rotate 7
+    daily
+    size 50M
+    missingok
+    notifempty
+    create
+    compress
+}

@@ -1,68 +1,23 @@
 ---
-
-# Pavan
-
-- name: Install Pavan's Programs
-  apt:
-    name:
-      - zsh
-      - fontconfig
-      - screen
-  become: true
-
-- name: Add a User for Pavan
-  user:
-    name: prikhi
-    password: "{{ pavans_password }}"
-    groups:
-      - adm
-      - sudo
-      - mail
-    append: true
-    shell: "/bin/zsh"
-  become: true
-
-- name: Copy Pavan's Public SSH Key
-  authorized_key:
-    user: prikhi
-    key: "{{ item }}"
-  with_file:
-    - public_keys/pavan
-
-- name: Clone Pavan's Dotfiles
-  git:
-    repo: "https://github.com/prikhi/dotfiles.git"
-    accept_hostkey: true
-    dest: /home/prikhi/.dotfiles
-  become: true
-  become_user: prikhi
-
-- name: Update Pavan's Dotfiles
-  shell: cd /home/prikhi/.dotfiles && bash install.sh
-  become: true
-  become_user: prikhi
-
 # Shared
 
 - name: Add a Common User
-  user:
+  ansible.builtin.user:
     name: sese
+    uid: 1005
     password: "{{ sese_password }}"
     groups:
       - adm
       - sudo
-      - mail
     append: true
     shell: "/bin/bash"
   become: true
 
 - name: Copy Public SSH Key's for the Common User
-  authorized_key:
+  ansible.posix.authorized_key:
     user: sese
     key: "{{ item }}"
   with_file:
-    - public_keys/pavan
-    - public_keys/abe
-    - public_keys/jason
+    - public_keys/deploy
   become: true
   become_user: sese

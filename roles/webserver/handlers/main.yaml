@@ -1,33 +1,13 @@
 ---
 
-- name: restart prerender
-  systemd:
-    name: prerender
-    state: restarted
-    daemon-reload: true
-  become: true
-
-- name: restart server
-  systemd:
-    name: api-server
-    state: restarted
-    daemon-reload: true
-  become: true
-
-- name: restart sshd
-  systemd:
+- name: Restart sshd
+  ansible.builtin.systemd:
     name: sshd
     state: restarted
   become: true
 
-- name: restart nginx
-  systemd:
+- name: Restart nginx
+  ansible.builtin.systemd:
     name: nginx
     state: reloaded
-  become: true
-
-- name: restart postgresql
-  systemd:
-    name: postgresql
-    state: restarted
   become: true

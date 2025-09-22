@@ -1,55 +1,76 @@
 ---
 
 - name: Ensure NGINX Is Installed
-  apt:
+  ansible.builtin.apt:
     name:
       - nginx
       - ssl-cert
   become: true
 
 - name: Ensure the Default NGINX Site is Disabled
-  file:
+  ansible.builtin.file:
     path: /etc/nginx/sites-enabled/default
     state: absent
-  notify: restart nginx
+  notify: Restart nginx
   become: true
 
 - name: Check if SSL Certificate Has Been Generated
-  stat:
+  ansible.builtin.stat:
     path: "/etc/letsencrypt/live/{{ inventory_hostname }}"
   register: ssl_cert_check
   become: true
 
 - name: Configure NGINX Site
-  template:
+  ansible.builtin.template:
     dest: /etc/nginx/sites-available/website
     src: website.nginx.j2
-  notify: restart nginx
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart nginx
   become: true
 
 - name: Ensure the NGINX Site is Enabled
-  file:
+  ansible.builtin.file:
     src: /etc/nginx/sites-available/website
     dest: /etc/nginx/sites-enabled/website
     state: link
-  notify: restart nginx
+  notify: Restart nginx
   become: true
 
 - name: Ensure the Website's NGINX Directories Exist
-  file:
+  ansible.builtin.file:
     path: "/var/www/{{ item }}"
     state: directory
-    owner: www-data
-    group: www-data
-    mode: '775'
+    # These are owned by the user which is used inside the backend container
+    # to write logs and media files mounted from the host
+    # This is needed to avoid permission issues when the backend container tries to write to these directories
+    # The user and group should match the UID and GID of the user running the backend
+    # container, which is 1000:1000 for the backend container
+    owner: 1000
+    group: 1000
+    mode: '0775'
   with_items:
-    - client
     - media
+    - backend-logs
+  become: true
+
+- name: Ensure the NGINX log Directory Exists
+  ansible.builtin.file:
+    path: "/var/www/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: '0775'
+  with_items:
     - logs
   become: true
 
 - name: Ensure the Access & Error Logs Are Rotated
-  copy:
+  ansible.builtin.copy:
     src: roles/webserver/files/logrotate_webserver
     dest: /etc/logrotate.d/webserver
+    owner: root
+    group: root
+    mode: '0644'
   become: true

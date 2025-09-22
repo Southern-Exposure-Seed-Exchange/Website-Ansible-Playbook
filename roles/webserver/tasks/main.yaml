@@ -1,13 +1,13 @@
 ---
 
 - name: Update Package List
-  apt:
+  ansible.builtin.apt:
     update_cache: true
   tags: basic
   become: true
 
 - name: Install Basic Utilities
-  apt:
+  ansible.builtin.apt:
     name:
       - acl
       - git
@@ -15,38 +15,33 @@
       - iftop
       - iotop
       - vim
-      - python-apt
   tags: basic
   become: true
 
 - name: Configure Personal User Accounts
-  import_tasks: users.yaml
+  ansible.builtin.import_tasks: users.yaml
   tags: users
 
-- name: Configure Email Sending
-  import_tasks: emails.yaml
-  tags: email
+- name: Install Docker
+  ansible.builtin.import_tasks: docker.yaml
+  tags: docker
 
 - name: Configure Server Security
-  import_tasks: security.yaml
+  ansible.builtin.import_tasks: security.yaml
   tags: security
 
 - name: Configure Web Server
-  import_tasks: nginx.yaml
+  ansible.builtin.import_tasks: nginx.yaml
   tags: nginx
 
 - name: Configure Certbot
-  import_tasks: certbot.yaml
+  ansible.builtin.import_tasks: certbot.yaml
   tags: certbot
 
-- name: Configure Database
-  import_tasks: database.yaml
-  tags: database
-
-- name: Configure Website Code
-  import_tasks: code.yaml
-  tags: code
-
 - name: Configure Prerender Server
-  import_tasks: prerender.yaml
+  ansible.builtin.import_tasks: prerender.yaml
   tags: prerender
+
+- name: Configure Deploy User
+  ansible.builtin.import_tasks: deploy.yaml
+  tags: deploy
