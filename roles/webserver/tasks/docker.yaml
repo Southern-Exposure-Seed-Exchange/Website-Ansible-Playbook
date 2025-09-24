@@ -43,3 +43,21 @@
     job: "docker system prune --all --force --filter=\"until=24h\""
     state: present
   become: true
+
+- name: Create Docker daemon configuration directory
+  ansible.builtin.file:
+    path: /etc/docker
+    state: directory
+    mode: '0755'
+  become: true
+
+- name: Configure Docker daemon to use journald log driver
+  ansible.builtin.copy:
+    content: |
+      {
+        "log-driver": "journald"
+      }
+    dest: /etc/docker/daemon.json
+    mode: '0644'
+  notify: Restart docker
+  become: true
