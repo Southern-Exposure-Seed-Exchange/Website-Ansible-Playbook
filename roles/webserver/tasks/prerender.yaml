@@ -7,7 +7,7 @@
     state: started
     restart_policy: always
     ports:
-      - "127.0.0.1:5000:3000"
+      - "5000:3000"
     cpus: 1
     memory: 1G
     env:
