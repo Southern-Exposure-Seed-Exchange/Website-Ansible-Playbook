@@ -51,7 +51,15 @@
     - name: Restart prerender container
       community.docker.docker_container:
         name: prerender
+        image: tvanro/prerender-alpine:7.1.0
         restart: true
+        restart_policy: always
+        ports:
+          - "5000:3000"
+        cpus: 1
+        memory: 1G
+        env:
+          MEMORY_CACHE: "1"
       become: true
       become_user: deploy
 
